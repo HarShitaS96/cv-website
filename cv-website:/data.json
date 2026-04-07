@@ -1,0 +1,25 @@
+{
+  "name": "Harshita Saxena",
+  "title": "SAP Technical Lead",
+  "email": "harshisaxena0610@gmail.com",
+  "summary": "SAP Technical Lead with 5+ years of experience in SAP HANA, PL/SQL, and data solutions.",
+
+  "experience": [
+    {
+      "role": "Technology Lead",
+      "company": "Infosys",
+      "duration": "2025 - Present",
+      "points": [
+        "Reduced cost by 25%",
+        "Improved scalability",
+        "Led SAP HANA projects"
+      ]
+    }
+  ],
+
+  "skills": ["SAP HANA", "PL/SQL", "Python", "Machine Learning"],
+
+  "certifications": ["AWS", "Google Cloud", "SAP HANA"],
+
+  "awards": ["Infosys Rising Star", "Insta Award"]
+}
