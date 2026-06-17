@@ -1,44 +1,74 @@
-fetch('data.json')
-.then(res => res.json())
-.then(data => {
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // 1. DYNAMIC EXPERIENCE COUNTER LOGIC
+    const experienceElement = document.getElementById("experience");
+    
+    if (experienceElement) {
+        // Enclosing in a clean string format avoids strict browser octal syntax issues
+        const startDate = new Date("2019-10-14"); 
+        const today = new Date();
 
-  document.getElementById('name').innerText = data.name;
-  document.getElementById('title').innerText = data.title;
-  document.getElementById('summary').innerText = data.summary;
+        let years = today.getFullYear() - startDate.getFullYear();
+        let months = today.getMonth() - startDate.getMonth();
+        let days = today.getDate() - startDate.getDate();
 
-  // Experience
-  let expHTML = '';
-  data.experience.forEach(e => {
-    expHTML += `
-      <div class="card">
-        <h4>${e.role} - ${e.company}</h4>
-        <p>${e.duration}</p>
-        <ul>
-          ${e.points.map(p => `<li>${p}</li>`).join('')}
-        </ul>
-      </div>
-    `;
-  });
-  document.getElementById('experience').innerHTML = expHTML;
+        if (days < 0) {
+            months--;
+            const previousMonth = new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                0
+            );
+            days += previousMonth.getDate();
+        }
 
-  // Skills
-  data.skills.forEach(s => {
-    document.getElementById('skills').innerHTML += `<li>${s}</li>`;
-  });
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
 
-  // Certifications
-  data.certifications.forEach(c => {
-    document.getElementById('certifications').innerHTML += `<li>${c}</li>`;
-  });
+        experienceElement.innerHTML = 
+            years + " Years " + 
+            months + " Months " + 
+            days + " Days";
+    }
 
-  // Awards
-  data.awards.forEach(a => {
-    document.getElementById('awards').innerHTML += `<li>${a}</li>`;
-  });
+    // 2. SCROLL HIGHLIGHT / ACTIVE MENU LOGIC
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".navbar ul li a");
 
+    const observerOptions = {
+        root: null,
+        rootMargin: "-10% 0px -40% 0px", // Triggers active class right as a section hits the upper viewport
+        threshold: 0.05
+    };
+
+    const observer = new Intersection Observer((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const currentId = entry.target.getAttribute("id");
+                
+                navLinks.forEach((link) => {
+                    const href = link.getAttribute("href").replace("#", "");
+                    
+                    // Matches exact navbar links or handles custom variations safely
+                    if (href === currentId || 
+                        (currentId === "experience-section" && href === "experience") ||
+                        (currentId === "experience" && href === "experience-section")) {
+                        
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
 });
 
-// Download CV
+// 3. DOWNLOAD CV FUNCTION
 function downloadCV() {
-  window.open('cv.pdf', '_blank');
+    window.open('resume.pdf', '_blank'); 
 }
